@@ -32,8 +32,8 @@ RUN chown -R appuser:appuser /app
 # Switch to non-root user
 USER appuser
 
-# Expose the port the app runs on
-EXPOSE 9999
+# Expose the port the app runs on (Cloud Run will set PORT environment variable)
+EXPOSE $PORT
 
-# Use uv to run the application
-CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9999"]
+# Use uv to run the application with PORT environment variable
+CMD ["sh", "-c", "uv run uvicorn main:app --host 0.0.0.0 --port ${PORT:-9999}"]

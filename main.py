@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
@@ -15,10 +17,13 @@ skill = AgentSkill(
     examples=["Who is Leo Messi?"],
 )
 
+# Get port from environment variable, default to 9999 for local development
+port = int(os.getenv("PORT", 9999))
+
 agent_card = AgentCard(
     name="Tavily Agent",
     description="Search the web with the Tavily API and answer questions about the results.",
-    url="http://localhost:9999/",
+    url=f"http://localhost:{port}/",
     version="1.0.0",
     defaultInputModes=["text", "text/plain"],
     defaultOutputModes=["text", "text/plain"],
@@ -45,4 +50,4 @@ app = CORSMiddleware(
 )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=9999)
+    uvicorn.run(app, host="0.0.0.0", port=port)
