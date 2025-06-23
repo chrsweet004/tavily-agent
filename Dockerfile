@@ -12,12 +12,11 @@ RUN groupadd --gid 1000 appuser && \
 # Set work directory
 WORKDIR /app
 
-# Copy dependency files first (for better layer caching)
+# Copy dependency files
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies first (for better layer caching)
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-install-project
+# Install dependencies
+RUN uv sync --locked --no-install-project
 
 # Copy application code
 COPY main.py ./
@@ -25,8 +24,7 @@ COPY agent.py ./
 COPY agent_executor.py ./
 
 # Sync the project (install the project itself)
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked
+RUN uv sync --locked
 
 # Change ownership of the app directory to the non-root user
 RUN chown -R appuser:appuser /app
