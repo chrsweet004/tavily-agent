@@ -44,4 +44,5 @@ app = CORSMiddleware(
     allow_headers=["*"],
 )
 
-uvicorn.run(app, host="0.0.0.0", port=9999)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=9999)
