@@ -17,13 +17,15 @@ skill = AgentSkill(
     examples=["Who is Leo Messi?"],
 )
 
-# Get port from environment variable, default to 9999 for local development
-port = int(os.getenv("PORT", 9999))
+# Get port from environment variable
+port = int(os.getenv("PORT"))
+# Get service URL for agent card (Cloud Run will provide this)
+service_url = os.getenv("SERVICE_URL", f"http://localhost:{port}")
 
 agent_card = AgentCard(
     name="Tavily Agent",
     description="Search the web with the Tavily API and answer questions about the results.",
-    url=f"http://localhost:{port}/",
+    url=service_url,
     version="1.0.0",
     defaultInputModes=["text", "text/plain"],
     defaultOutputModes=["text", "text/plain"],
