@@ -1,8 +1,12 @@
 import json
+import uuid
 
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events.event_queue import EventQueue
 from a2a.types import (
+    DataPart,
+    Message,
+    Role,
     Task,
     TaskArtifactUpdateEvent,
     TaskState,
@@ -41,6 +45,52 @@ class TavilyAgentExecutor(AgentExecutor):
                             message=new_agent_text_message(
                                 event["content"], task.contextId, task.id
                             ),
+                        ),
+                        final=False,
+                        contextId=task.contextId,
+                        taskId=task.id,
+                    )
+                )
+            elif event["type"] == "tool_call":
+                event_queue.enqueue_event(
+                    TaskStatusUpdateEvent(
+                        status=TaskStatus(
+                            state=TaskState.working,
+                            message=Message(
+                                contextId=task.contextId,
+                                messageId=str(uuid.uuid4()),
+                                parts=[DataPart(data=event["tool_call_args"])],
+                                metadata={
+                                    "type": "tool-call",
+                                    "toolCallId": event["tool_call_id"],
+                                    "toolCallName": event["tool_call_name"],
+                                },
+                                role=Role.agent,
+                                taskId=task.id,
+                            )
+                        ),
+                        final=False,
+                        contextId=task.contextId,
+                        taskId=task.id,
+                    )
+                )
+            elif event["type"] == "tool_call_result":
+                event_queue.enqueue_event(
+                    TaskStatusUpdateEvent(
+                        status=TaskStatus(
+                            state=TaskState.working,
+                            message=Message(
+                                contextId=task.contextId,
+                                messageId=str(uuid.uuid4()),
+                                parts=[DataPart(data=event["tool_call_result"])],
+                                metadata={
+                                    "type": "tool-call-result",
+                                    "toolCallId": event["tool_call_id"],
+                                    "toolCallName": event["tool_call_name"],
+                                },
+                                role=Role.agent,
+                                taskId=task.id,
+                            )
                         ),
                         final=False,
                         contextId=task.contextId,

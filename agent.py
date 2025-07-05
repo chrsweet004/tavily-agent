@@ -1,7 +1,8 @@
+import json
 from collections.abc import AsyncIterable
 from typing import Any, Dict, List, Literal, Set
 
-from langchain_core.messages import AIMessage, AnyMessage
+from langchain_core.messages import AIMessage, AnyMessage, ToolMessage
 from langchain_core.runnables.config import RunnableConfig
 from langchain_tavily import TavilySearch
 from langgraph.checkpoint.memory import MemorySaver
@@ -85,6 +86,29 @@ class TavilyAgent:
                                 "type": "message",
                                 "content": item["text"],
                             }
+
+                if message.tool_calls:
+                    for tool_call in message.tool_calls:
+                        yield {
+                            "type": "tool_call",
+                            "tool_call_id": tool_call["id"],
+                            "tool_call_name": tool_call["name"],
+                            "tool_call_args": tool_call["args"],
+                        }
+            elif isinstance(message, ToolMessage):
+                tool_call_result: str | List[str | Dict] = message.content
+
+                try:
+                    tool_call_result: str | Dict | List[str | Dict] = json.loads(tool_call_result)
+                except json.JSONDecodeError:
+                    continue
+
+                yield {
+                    "type": "tool_call_result",
+                    "tool_call_id": message.tool_call_id,
+                    "tool_call_name": message.name,
+                    "tool_call_result": tool_call_result,
+                }
 
         yield self.get_agent_response(config)
 
