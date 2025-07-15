@@ -20,8 +20,6 @@ RUN uv sync --locked --no-install-project
 
 # Copy application code
 COPY main.py ./
-COPY agent.py ./
-COPY agent_executor.py ./
 
 # Sync the project (install the project itself)
 RUN uv sync --locked
