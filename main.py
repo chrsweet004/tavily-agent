@@ -10,6 +10,7 @@ from a2anet.types.langgraph import StructuredResponse
 from langchain_tavily import TavilySearch
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
+from starlette.applications import Starlette
 
 SYSTEM_INSTRUCTION: str = (
     "You are a helpful assistant that can search the web with the Tavily API and answer questions about the results.\n"
@@ -63,5 +64,7 @@ server: A2AStarletteApplication = A2AStarletteApplication(
     agent_card=agent_card, http_handler=request_handler
 )
 
+app: Starlette = server.build()
+
 if __name__ == "__main__":
-    uvicorn.run(server.build(), host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
