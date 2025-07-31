@@ -41,6 +41,7 @@ service_url: str = os.getenv("SERVICE_URL", f"http://localhost:{port}")
 
 agent_card: AgentCard = AgentCard(
     name="Tavily Agent",
+    icon_url="https://raw.githubusercontent.com/a2anet/tavily-agent/refs/heads/main/tavily_logo.jpeg",
     description="Search the web with the Tavily API and answer questions about the results.",
     url=service_url,
     version="1.0.0",
