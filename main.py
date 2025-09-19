@@ -14,14 +14,20 @@ from starlette.applications import Starlette
 
 SYSTEM_INSTRUCTION: str = (
     "You are a helpful assistant that can search the web with the Tavily API and answer questions about the results.\n"
+    "You should only respond to messages that can be answered by searching the web, and if the user's most recent message doesn't contain a question, or contains a question that can't be answered by searching the web, you should explain that to the user and ask them to try again with an appropriate query.\n"
     "If the `tavily_search` tool returns insufficient results, you should explain that to the user and ask them to try again with a more specific query.\n"
     "You can use markdown format to format your responses."
 )
 
 RESPONSE_FORMAT_INSTRUCTION: str = (
     "You are an expert A2A protocol agent.\n"
-    "Your task is to read through all previous messages throughly and determine what the state of the task is.\n"
-    "If the task is complete, extract the task output into an artifact. The task is complete if the `tavily_search` tool has been called and the results are sufficient to answer the user's question."
+    "Your task is to read through all previous messages thoroughly and determine what the state of the task is.\n"
+    "The state of the task should be:\n"
+    "- 'completed' if the user's most recent message contains a question that can be answered by searching the web, the `tavily_search` tool has been called, and the results are sufficient to answer the user's question.\n"
+    "- 'failed' if the user's most recent message contains a question that can be answered by searching the web, the `tavily_search` tool has been called, and the results are insufficient to answer the user's question.\n"
+    "- 'rejected' if the user's most recent message doesn't contain a question or contains a question that can't be answered by searching the web.\n"
+    "If the task is 'completed', set 'task_state' to 'completed' and include at least one artifact in 'artifacts'.\n"
+    "If the task is not 'completed', do not include any artifacts."
 )
 
 graph = create_react_agent(

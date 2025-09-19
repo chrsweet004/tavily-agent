@@ -4,7 +4,7 @@ A [LangGraph](https://langchain-ai.github.io/langgraph/) agent that implements t
 
 This repository was created for the [Agent2Agent (A2A) UI](https://github.com/A2ANet/A2AUI).
 
-## Installation & Usage
+## 🛠️ Installation & Usage
 
 ### Local A2A Server
 
@@ -47,7 +47,7 @@ To run the agent using Docker:
 
 The server will start on `http://localhost:9999`
 
-## Deployment
+## 🚀 Deployment
 
 You can deploy the containerised agent to various cloud platforms.
 
@@ -109,7 +109,7 @@ The agent should be deployed. To check it's been deployed successfully:
 
 The agent has been successfully deployed and will automatically redeploy when changes are pushed to the repo!
 
-## Join the A2A Net Community
+## 🤝 Join the A2A Net Community
 
 A2A Net is a site to find and share AI agents and open-source community. Join to share your A2A agents, ask questions, stay up-to-date with the latest A2A news, be the first to hear about open-source releases, tutorials, and more!
 
