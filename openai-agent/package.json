@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/resources": "^2.2.0",
+    "@opentelemetry/sdk-metrics": "^2.2.0",
+    "@opentelemetry/sdk-node": "^0.207.0",
+    "@opentelemetry/sdk-trace-base": "^2.2.0",
+    "@opentelemetry/semantic-conventions": "^1.37.0",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "openai": "^6.7.0",
+    "winston": "^3.18.3"
+  }
+}

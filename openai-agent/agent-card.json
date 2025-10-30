@@ -1,0 +1,16 @@
+{
+  "id": "agent://uuid/7df9bc60-8757-4f24-af43-fa58e468a91b",
+  "name": "Open-AI Q/A Agent",
+  "version": "0.1.0",
+  "description": "Prompts Open AI with simple questions, then receives a formatted response.",
+  "methods": ["ask", "health"],
+  "relationships": [],
+  "endpoints": {"ask": "http://localhost:8000/ask",
+    "health": "http://localhost:8000/health"},
+  "labels": {
+    "team": "core",
+    "env": "dev",
+    "framework": "fastapi",
+    "provider": "openai"
+  }
+}
