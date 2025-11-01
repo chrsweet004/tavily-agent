@@ -17,7 +17,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 # Metrics
 from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader, ConsoleMetricExporter
 
 # Logs
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
@@ -42,6 +42,7 @@ if os.path.exists(config_path):
         cfg = json.load(f)
         if "collector" in cfg and "endpointGrpc" in cfg["collector"]:
             collector_endpoint = cfg["collector"]["endpointGrpc"].replace("http://", "")
+            print("collectorendpoint:", collector_endpoint)
 
 resource = Resource(attributes={SERVICE_NAME: SERVICE})
 
@@ -54,6 +55,11 @@ tracer = trace.get_tracer(__name__)
 
 # --- Metrics ---
 otlp_metric_exporter = OTLPMetricExporter(endpoint=collector_endpoint, insecure=True)
+console_metric_reader = PeriodicExportingMetricReader(ConsoleMetricExporter())
+meter_provider = MeterProvider(
+    resource=resource,
+    metric_readers=[console_metric_reader],
+)
 metric_reader = PeriodicExportingMetricReader(otlp_metric_exporter, export_interval_millis=5000)
 meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
 metrics.set_meter_provider(meter_provider)
